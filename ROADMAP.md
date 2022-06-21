@@ -7,7 +7,7 @@ scripts:
   - "npm run build" 
 ```
 
-[ ]: Updater que busque actualizaciones y que pregunte si se quiere actualizar
+[x]: Updater que busque actualizaciones y que pregunte si se quiere actualizar
 ```shell
 projectile --no-update
 ```

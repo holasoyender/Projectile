@@ -19,3 +19,6 @@ pub fn error(msg: &str) {
 pub fn info(msg: &str) {
     println!("[ INFO ] {}", msg);
 }
+pub fn api(msg: &str) {
+    println!("[ API ] {}", msg);
+}

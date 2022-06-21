@@ -16,4 +16,6 @@ config = "0.13.1"
 notify = "4.0.17"
 winconsole = "0.11.1"
 yaml-rust = "0.4.5"
-
+reqwest = { version = "0.11.11", features = ["blocking"] }
+json = "0.12.4"
+zip = "0.5.13"

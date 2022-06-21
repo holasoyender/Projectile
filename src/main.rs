@@ -12,6 +12,7 @@ use yaml_rust::YamlLoader;
 
 mod cfg;
 mod logger;
+mod updater;
 extern crate dirs;
 extern crate winconsole;
 extern crate yaml_rust;
@@ -21,6 +22,8 @@ static mut SETTINGS: Option<Config> = None;
 fn main() {
 
     set_console_title();
+
+    let mut just_updated = false;
 
     let args: Vec<String> = std::env::args().collect();
     if args.len() > 1 {
@@ -40,6 +43,9 @@ fn main() {
             logger::banner();
             println!("La configuración actual se encuentra en {}", cfg::get_config_filename());
             std::process::exit(0);
+        } else if args[1] == "--update" {
+            updater::handle_update();
+            just_updated = true;
         } else {
             logger::banner();
             println!("No se reconoce el argumento {}", args[1]);
@@ -48,6 +54,34 @@ fn main() {
     }
 
     logger::banner();
+    if !just_updated {
+        if updater::check_for_updates() {
+            println!("Se ha encontrado una versión más reciente, ¿Quieres actualizar? (Si/No)");
+
+            let mut option = String::new();
+            loop {
+                print!(">>> ");
+                std::io::stdout().lock().flush().unwrap();
+                std::io::stdin().read_line(&mut option).unwrap();
+                option = option.trim().to_string();
+                if option == "Si" || option == "si" || option == "y" || option == "Y" || option == "yes" || option == "YES" {
+                    updater::update();
+                    break;
+                } else if option == "No" || option == "no" || option == "n" || option == "N" {
+                    logger::info("Se ha omitido la actualización.");
+                    println!();
+                    break;
+                } else {
+                    println!("No se reconoce la opción {}", option);
+                    option = String::new();
+                }
+            }
+        } else {
+            logger::api("No se han encontrado versiones más recientes.");
+            println!();
+        }
+    }
+
     if !cfg::config_exists() {
 
         let config_dir = dirs::config_dir();
