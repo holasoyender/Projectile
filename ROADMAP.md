@@ -1,6 +1,6 @@
 ##  Projectile roadmap
 
-[ ]: Scripts al finalizar de copiar los archivos  
+[x]: Scripts al finalizar de copiar los archivos  
 ```yaml
 scripts:
   - "npm install"
@@ -12,4 +12,5 @@ scripts:
 projectile --no-update
 ```
 [ ]: Establecer la carpeta en el path para poder interactuar desde la línea de comandos
+[ ]: Instalador?
 

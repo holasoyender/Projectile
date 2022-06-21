@@ -315,6 +315,19 @@ fn main() {
             std::process::exit(0);
         } else {
 
+            let current_folder = std::fs::read_dir("./").unwrap();
+            let mut empty = true;
+
+            if current_folder.count() > 1 {
+                empty = false;
+            }
+            if !empty {
+                println!();
+                logger::error("El directorio actual no está vacío. Por seguridad este programa solo se puede usar en directorios vacíos.");
+                std::thread::sleep(Duration::from_secs(5));
+                std::process::exit(1);
+            }
+
             let project_path = selected_project_path.clone();
             let project_file = std::fs::read_to_string(project_path + "\\project.yml").unwrap();
             let project_file = YamlLoader::load_from_str(project_file.as_str());
@@ -358,7 +371,49 @@ fn main() {
                                 }
                             }
                             logger::ok("Todas las variables han sido guardadas correctamente! Copiando archivos...");
-                            //TODO....
+                            for i in 0..files.len() {
+                                let mut file_name = files[i].split("\\").last().unwrap().to_string();
+                                let mut file_content = std::fs::read_to_string(files[i].as_str()).unwrap();
+                                for j in 0..vars_setters.len() {
+                                    let setter = vars_setters[j].clone();
+                                    let value = vars_values[j].clone();
+
+                                    file_content = file_content.replace(format!(r#"{{{{{}}}}}"#, setter).as_str(), value.as_str());
+                                    file_name = file_name.replace(format!(r#"{{{{{}}}}}"#, setter).as_str(), value.as_str());
+                                }
+                                std::fs::write(format!("./{}", file_name).as_str(), file_content).unwrap();
+                                let percent = (i as f32 / files.len() as f32) * 100.0;
+                                logger::info(format!("Copiado {} ({}%)", file_name, percent).as_str());
+                            }
+                            logger::ok("Todos los archivos fueron copiados correctamente!.");
+
+                            let project_scripts = file["scripts"].as_vec();
+                            match project_scripts {
+                                Some(scripts) => {
+                                    println!("Ejecutando {} script(s)...", scripts.len());
+                                    for i in 0..scripts.len() {
+                                        let script = scripts[i].as_str().unwrap();
+                                        let output = Command::new("cmd")
+                                            .arg("/c")
+                                            .arg(script)
+                                            .output()
+                                            .expect("Error al ejecutar el script");
+                                        println!("{}", String::from_utf8_lossy(&output.stdout));
+                                        println!("{}", String::from_utf8_lossy(&output.stderr));
+
+                                        if i == scripts.len() - 1 {
+                                            logger::ok("Todos los scripts han sido ejecutados correctamente! Cerrando consola...");
+                                            std::thread::sleep(Duration::from_secs(5));
+                                            std::process::exit(0);
+                                        }
+                                    }
+                                },
+                                None => {
+                                    logger::info("No se han encontrado scripts en el archivo project.yml. Cerrando consola...");
+                                    std::thread::sleep(Duration::from_secs(5));
+                                    std::process::exit(0);
+                                }
+                            }
                             println!("{:?}", vars_values);
 
                         }
