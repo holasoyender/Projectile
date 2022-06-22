@@ -8,6 +8,7 @@ use std::time::Duration;
 use std::fs::File;
 use std::io::{Write};
 use std::process::Command;
+use ansi_term::{Color, Style};
 use yaml_rust::YamlLoader;
 
 mod cfg;
@@ -266,19 +267,35 @@ fn main() {
                         let project_desc = file["description"].as_str();
                         match project_desc {
                             Some(desc) => {
-                                println!(" > {}. {} - {}", i+1, projects_names[i], desc);
+                                if config_color() {
+                                    println!("{}", Style::new().bold().paint(format!(" > {}. {} - {}", i + 1, Color::Green.paint(projects_names[i].as_str()), Color::Blue.paint(desc))));
+                                } else {
+                                    println!(" > {}. {} - {}", i + 1, projects_names[i], desc);
+                                }
                             }
                             None => {
-                                println!(" > {}. {}", i+1, projects_names[i]);
+                                if config_color() {
+                                    println!("{}", Style::new().bold().paint(format!(" > {}. {}", i + 1, Color::Green.paint(projects_names[i].as_str()))));
+                                } else {
+                                    println!(" > {}. {}", i + 1, projects_names[i]);
+                                }
                             }
                         }
                     }
                     Err(_) => {
-                        println!(" > {}. {} (Error al leer al archivo project.yml)", i + 1, projects_names[i]);
+                        if config_color() {
+                            println!("{}", Style::new().bold().paint(format!(" > {}. {} {}", i + 1, Color::Green.paint(projects_names[i].as_str()), Color::Red.paint("(Error al leer al archivo project.yml)"))));
+                        } else {
+                            println!(" > {}. {} (Error al leer al archivo project.yml)", i + 1, projects_names[i]);
+                        }
                     }
                 }
             } else {
-                println!(" > {}. {} (No se ha encontrado el archivo project.yml)", i + 1, projects_names[i]);
+                if config_color() {
+                    println!("{}", Style::new().bold().paint(format!(" > {}. {} {}", i + 1, Color::Green.paint(projects_names[i].as_str()), Color::Red.paint("(No se ha encontrado el archivo project.yml)"))));
+                } else {
+                    println!(" > {}. {} (No se ha encontrado el archivo project.yml)", i + 1, projects_names[i]);
+                }
             }
         }
         let mut selected_project_raw = String::new();
@@ -570,4 +587,27 @@ fn watch() {
 }
 fn set_console_title() {
     winconsole::console::set_title(format!("Projectile v{}", env!("CARGO_PKG_VERSION")).as_str()).unwrap();
+}
+
+pub fn config_color() -> bool {
+    unsafe {
+        let settings = SETTINGS.clone();
+        return match settings {
+            Some(_settings) => {
+                let settings = _settings.try_deserialize::<HashMap<String, String>>().unwrap();
+                if settings.contains_key("color") {
+                    if settings.get("color").unwrap() == "true" {
+                        true
+                    } else {
+                        false
+                    }
+                } else {
+                    false
+                }
+            },
+            None => {
+                true
+            }
+        }
+    }
 }
