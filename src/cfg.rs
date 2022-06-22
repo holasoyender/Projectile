@@ -31,5 +31,7 @@ pub fn get_root_path() -> String {
 pub fn get_default_config() -> String {
     let config_dir = dirs::config_dir();
     let config_path = config_dir.unwrap().join("Projectile");
-    return format!(r#"project_path: "{}"\ncolor: true "#, config_path.to_str().unwrap().to_string().replace("\\", "\\\\")+"\\\\projects");
+    return format!(r#"
+project_path: "{}"
+color: true "#, config_path.to_str().unwrap().to_string().replace("\\", "\\\\")+"\\\\projects");
 }
