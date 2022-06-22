@@ -16,6 +16,7 @@ mod logger;
 mod updater;
 mod installer;
 mod windows;
+mod utils;
 extern crate dirs;
 extern crate winconsole;
 extern crate yaml_rust;
@@ -355,9 +356,19 @@ fn main() {
 
             for file in files {
                 let file_name = file.split("\\").last().unwrap();
-                std::fs::copy(file.as_str(), format!("./{}", file_name)).unwrap();
-
-                logger::info(format!("Copiado {}", file_name).as_str());
+                let copy_action = std::fs::copy(file.as_str(), format!("./{}", file_name));
+                match copy_action {
+                    Ok(_) => {
+                        logger::info(format!("Copiado {}", file_name).as_str());
+                    }
+                    Err(_) => {
+                        if utils::copy_folder_content(file.as_str().clone()) {
+                            logger::info(format!("Copiado {}", file_name).as_str());
+                        } else {
+                            logger::error(format!("Copiado {}", file_name).as_str());
+                        }
+                    }
+                }
             }
             logger::ok(format!("Todos los archivos del proyecto {} fueron copiados correctamente!.", selected_project_name).as_str());
             std::thread::sleep(Duration::from_secs(5));
@@ -422,17 +433,28 @@ fn main() {
                             logger::ok("Todas las variables han sido guardadas correctamente! Copiando archivos...");
                             for i in 0..files.len() {
                                 let mut file_name = files[i].split("\\").last().unwrap().to_string();
-                                let mut file_content = std::fs::read_to_string(files[i].as_str()).unwrap();
-                                for j in 0..vars_setters.len() {
-                                    let setter = vars_setters[j].clone();
-                                    let value = vars_values[j].clone();
+                                let file_content = std::fs::read_to_string(files[i].as_str());
+                                match file_content {
+                                    Ok(mut content) => {
+                                        for j in 0..vars_setters.len() {
+                                            let setter = vars_setters[j].clone();
+                                            let value = vars_values[j].clone();
 
-                                    file_content = file_content.replace(format!(r#"{{{{{}}}}}"#, setter).as_str(), value.as_str());
-                                    file_name = file_name.replace(format!(r#"{{{{{}}}}}"#, setter).as_str(), value.as_str());
+                                            content = content.replace(format!(r#"{{{{{}}}}}"#, setter).as_str(), value.as_str());
+                                            file_name = file_name.replace(format!(r#"{{{{{}}}}}"#, setter).as_str(), value.as_str());
+                                        }
+                                        std::fs::write(format!("./{}", file_name).as_str(), content).unwrap();
+                                        let percent = (i as f32 / files.len() as f32) * 100.0;
+                                        logger::info(format!("Copiado {} ({}%)", file_name, percent).as_str());
+                                    }
+                                    Err(_) => {
+                                        if utils::copy_folder_content_with_vars( files[i].as_str().clone(), &vars_setters, &vars_values) {
+                                            logger::info(format!("Copiado {}", file_name).as_str());
+                                        } else {
+                                            logger::error(format!("No se ha podido copiar el archivo {}", file_name).as_str());
+                                        }
+                                    }
                                 }
-                                std::fs::write(format!("./{}", file_name).as_str(), file_content).unwrap();
-                                let percent = (i as f32 / files.len() as f32) * 100.0;
-                                logger::info(format!("Copiado {} ({}%)", file_name, percent).as_str());
                             }
                             logger::ok("Todos los archivos fueron copiados correctamente!.");
 
@@ -484,9 +506,19 @@ fn main() {
 
                             for file in files {
                                 let file_name = file.split("\\").last().unwrap();
-                                std::fs::copy(file.as_str(), format!("./{}", file_name)).unwrap();
-
-                                logger::info(format!("Copiado {}", file_name).as_str());
+                                let copy_action = std::fs::copy(file.as_str(), format!("./{}", file_name));
+                                match copy_action {
+                                    Ok(_) => {
+                                        logger::info(format!("Copiado {}", file_name).as_str());
+                                    }
+                                    Err(_) => {
+                                        if utils::copy_folder_content(file.as_str().clone()) {
+                                            logger::info(format!("Copiado {}", file_name).as_str());
+                                        } else {
+                                            logger::error(format!("Copiado {}", file_name).as_str());
+                                        }
+                                    }
+                                }
                             }
                             logger::ok(format!("Todos los archivos del proyecto {} fueron copiados correctamente!.", selected_project_name).as_str());
 
@@ -538,9 +570,19 @@ fn main() {
 
                     for file in files {
                         let file_name = file.split("\\").last().unwrap();
-                        std::fs::copy(file.as_str(), format!("./{}", file_name)).unwrap();
-
-                        logger::info(format!("Copiado {}", file_name).as_str());
+                        let copy_action = std::fs::copy(file.as_str(), format!("./{}", file_name));
+                        match copy_action {
+                            Ok(_) => {
+                                logger::info(format!("Copiado {}", file_name).as_str());
+                            }
+                            Err(_) => {
+                                if utils::copy_folder_content(file.as_str().clone()) {
+                                    logger::info(format!("Copiado {}", file_name).as_str());
+                                } else {
+                                    logger::error(format!("Copiado {}", file_name).as_str());
+                                }
+                            }
+                        }
                     }
                     logger::ok(format!("Todos los archivos del proyecto {} fueron copiados correctamente!.", selected_project_name).as_str());
                     std::thread::sleep(Duration::from_secs(5));
@@ -585,6 +627,7 @@ fn watch() {
         }
     }
 }
+
 fn set_console_title() {
     winconsole::console::set_title(format!("Projectile v{}", env!("CARGO_PKG_VERSION")).as_str()).unwrap();
 }
