@@ -13,6 +13,8 @@ use yaml_rust::YamlLoader;
 mod cfg;
 mod logger;
 mod updater;
+mod installer;
+mod windows;
 extern crate dirs;
 extern crate winconsole;
 extern crate yaml_rust;
@@ -54,7 +56,22 @@ fn main() {
     }
 
     logger::banner();
-    if !just_updated {
+
+    let mut just_started = false;
+    if !cfg::config_file_exists() {
+        just_started = true;
+        println!("Parece que es la primera vez que inicias este programa!");
+        println!("Puedes obtener toda la información necesaria para mi uso en https://github.com/holasoyender/Projectile");
+        println!("A continuación se creará un archivo de configuración por defecto, el cual puedes encontrar en {}\\settings.yml", cfg::get_root_path());
+        println!("Tus templates de proyectos se guardarán en la carpeta {}\\projects, pero puedes cambiarla en cualquier momento desde el archivo de configuración", cfg::get_root_path());
+
+        if !installer::install() {
+            println!();
+            println!("Por favor, agrega la carpeta {} a tu PATH para que Projectile funcione correctamente", cfg::get_root_path());
+        }
+    }
+
+    if !just_updated && !just_started {
         if updater::check_for_updates() {
             println!("Se ha encontrado una versión más reciente, ¿Quieres actualizar? (Si/No)");
 
@@ -82,6 +99,10 @@ fn main() {
         }
     }
 
+    if windows::is_app_elevated() {
+        logger::warn("El programa se ejecuta como administrador, esto no es recomendado.");
+    }
+
     if !cfg::config_exists() {
 
         let config_dir = dirs::config_dir();
@@ -99,6 +120,11 @@ fn main() {
                 logger::error(format!("No se ha podido crear el archivo de configuración: {:?}", e).as_str());
                 std::process::exit(1);
             }
+        }
+
+        if just_started {
+            std::thread::sleep(Duration::from_secs(60));
+            std::process::exit(0);
         }
 
         let settings = Config::builder()
@@ -134,7 +160,9 @@ fn main() {
                 SETTINGS = Some(settings);
             }
             Err(_) => {
-                logger::error("El archivo de configuración no existe o está corrupto, creando uno nuevo...");
+                if !just_started {
+                    logger::error("El archivo de configuración no existe o está corrupto, creando uno nuevo...");
+                }
                 let mut file = File::create(cfg::get_config_filename()).unwrap();
 
                 file.write_all(cfg::get_default_config().as_bytes()).unwrap();
@@ -143,6 +171,10 @@ fn main() {
                     .build();
                 unsafe {
                     SETTINGS = Some(settings.unwrap());
+                }
+                if just_started {
+                    std::thread::sleep(Duration::from_secs(60));
+                    std::process::exit(0);
                 }
             }
         }

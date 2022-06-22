@@ -5,6 +5,11 @@ pub fn config_exists()-> bool {
     let config_path = config_dir.unwrap().join("Projectile");
     return config_path.exists();
 }
+pub fn config_file_exists() -> bool {
+    let config_dir = dirs::config_dir();
+    let file = config_dir.unwrap().join("Projectile").join("settings.yaml");
+    return file.exists();
+}
 pub fn get_config_filename() -> String {
     let config_dir = dirs::config_dir();
     let config_path = config_dir.unwrap().join("Projectile");

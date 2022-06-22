@@ -965,6 +965,7 @@ dependencies = [
  "notify",
  "reqwest",
  "static_vcruntime",
+ "winapi 0.3.9",
  "winconsole",
  "winres",
  "yaml-rust",

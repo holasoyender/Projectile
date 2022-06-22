@@ -22,3 +22,6 @@ pub fn info(msg: &str) {
 pub fn api(msg: &str) {
     println!("[ API ] {}", msg);
 }
+pub fn warn(msg: &str) {
+    println!("[ WARN ] {}", msg);
+}
