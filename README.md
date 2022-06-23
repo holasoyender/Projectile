@@ -39,7 +39,7 @@ Despues de esto el programa se cerrará automaticamente pasados 5 segundos.
 
 Para crear una nueva base de proyecto, debes de crear una carpeta en el directorio de proyectos, por defecto esa carpeta se encuentra en `C:\Users\<user>\AppData\Roaming\Projectile\projects`, pero puedes cambiarla en cualquier momento desde el archivo de configuración. El nombre de la carpeta será el nombre del proyecto.
 
-Es recomendable crear dentro del proyecto un archivo `proyect.yml`, que será leído por el programa para leer las variables y los scripts, su sintaxix es la siguiente:
+Es recomendable crear dentro del proyecto un archivo `proyect.yml`, que será leído por el programa para leer las variables y los scripts, su sintaxis es la siguiente:
 ```yml
 name: "Nombre del proyecto"
 description: "Descripción del proyecto"
