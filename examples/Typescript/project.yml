@@ -1,0 +1,9 @@
+name: "Typescript base"
+description: "Base para un projecto de NodeJS con Typescript"
+vars:
+ - project_name: "Nombre del proyecto"
+ - version: "Version del proyecto"
+
+scripts:
+ - "npm install"
+ - "npm run build"

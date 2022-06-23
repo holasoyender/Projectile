@@ -1,0 +1,1 @@
+console.log("Hola desde el proyecto {{project_name}}!")

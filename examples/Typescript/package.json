@@ -1,0 +1,16 @@
+{
+  "name": "{{project_name}}",
+  "version": "{{project_version}}",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/main.js",
+    "build": "tsc && echo App complilada correctamente"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.7.4"
+  }
+}
