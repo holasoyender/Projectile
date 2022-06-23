@@ -10,23 +10,23 @@ Al instalar **projectile** en el path de tu sistema, podrás acceder al comando 
 
 Ahora en el buscador de windows busca "variables de entorno"
 
-<img src="https://github.com/holasoyender/Projectile/blob/main/data/img/path1.png" height="315" width="782">
+<img src="https://projectile-api.kirobot.cc/img/path1.png" height="315" width="782">
 
 Se te abrirá una pestaña, en la que debes hacer click a "Variables de entorno".
 
-<img src="https://github.com/holasoyender/Projectile/blob/main/data/img/path2.png" height="493" width="415">
+<img src="https://projectile-api.kirobot.cc/img/path2.png" height="493" width="415">
 
 ## Paso 3: Localiza la variable **"path"**
 
 Una vez dentro del menú, debes localizar la variable **"Path"** dentro de la sección **"Variables del sistema"**, una vez encontrada hazla click y luego click en Editar.
 
-<img src="https://github.com/holasoyender/Projectile/blob/main/data/img/path3.png" height="588" width="618">
+<img src="https://projectile-api.kirobot.cc/img/path3.png" height="588" width="618">
 
 ## Paso 4: Añadir la carpeta
 
 A continuación, haz click en el botón "Nuevo" y pega la carpeta del **paso 1**, luego haz click en Aceptar
 
-<img src="https://github.com/holasoyender/Projectile/blob/main/data/img/path4.png" height="503" width="527">
+<img src="https://projectile-api.kirobot.cc/img/path4.png" height="503" width="527">
 
 ## Paso 5: Comprobar
 

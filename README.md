@@ -2,7 +2,6 @@
     <h1 align="center">🚀 Projectile</h1>
     <h4 align="center"><b>Projectile</b> es una simple aplicación para gestionar las bases de proyecto, escrita completamente en Rust.</h4>
 </center>
-<br>
 
 ## Como funciona
 
