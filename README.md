@@ -12,7 +12,7 @@ La primera vez que abras el programa te saltará un mensaje de bienvenida, de es
 Despues de esto el programa se instalará en la misma carpeta que el archivo de configuración.
 
 <center>
-<img src="https://projectile-api.kirobot.cc/img/banner.png" height="624" width="1116">
+<img src="https://projectile-api.kirobot.cc/img/banner.png" height="312" width="558">
 </center>
 
 ### Instalar
