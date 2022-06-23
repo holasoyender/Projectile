@@ -11,6 +11,10 @@ La primera vez que abras el programa te saltará un mensaje de bienvenida, de es
 
 Despues de esto el programa se instalará en la misma carpeta que el archivo de configuración.
 
+<center>
+<img src="https://projectile-api.kirobot.cc/img/banner.png" height="624" width="1116">
+</center>
+
 ### Instalar
 
 Una vez que el programa se haya abierto y copiado, debes de añadir dicha carpeta ( `C:\Users\<user>\AppData\Roaming\Projectile`) a la variable **path** de tu sistema, si no sabes como puedes mirar [esta guía](https://github.com/holasoyender/Projectile/blob/main/docs/path.md)
