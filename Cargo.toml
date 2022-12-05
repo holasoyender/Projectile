@@ -23,7 +23,7 @@ static_vcruntime = "2.0.0"
 
 [dependencies]
 dirs = "4.0.0"
-config = "0.13.2"
+config = "0.13.3"
 notify = "4.0.17"
 winconsole = "0.11.1"
 yaml-rust = "0.4.5"
