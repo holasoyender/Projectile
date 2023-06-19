@@ -32,4 +32,4 @@ json = "0.12.4"
 zip = "0.5.13"
 winapi = { version = "0.3.9", features = ["handleapi", "processthreadsapi", "winnt", "securitybaseapi", "impl-default"] }
 ansi_term = "0.12.1"
-build-time = "0.1.2"
+build-time = "0.1.3"
