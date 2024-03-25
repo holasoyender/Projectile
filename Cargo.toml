@@ -27,7 +27,7 @@ config = "0.13.2"
 notify = "4.0.17"
 winconsole = "0.11.1"
 yaml-rust = "0.4.5"
-reqwest = { version = "0.11.12", features = ["blocking"] }
+reqwest = { version = "0.12.2", features = ["blocking"] }
 json = "0.12.4"
 zip = "0.5.13"
 winapi = { version = "0.3.9", features = ["handleapi", "processthreadsapi", "winnt", "securitybaseapi", "impl-default"] }
